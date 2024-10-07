@@ -1,20 +1,20 @@
-// 文件路径: lib/features/login/service/auth_service.dart
+// Archivo: lib/features/login/service/auth_service.dart
 import 'package:hiddify/features/panel/v2board/models/invite_code_model.dart';
 import 'package:hiddify/features/panel/v2board/models/plan_model.dart';
 import 'package:hiddify/features/panel/v2board/models/user_info_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class AuthService {
-  static const _baseUrl = "https://tomato.galen.life";
+  static const _baseUrl = "https://domain.com";
   static const _inviteLinkBase = "$_baseUrl/#/register?code=";
 
-  // 获取完整邀请码链接的方法
+  // Método para obtener el enlace completo del código de invitación
   static String getInviteLink(String code) {
     return '$_inviteLinkBase$code';
   }
-  // 统一的 POST 请求方法
+
+  // Método POST unificado
   Future<Map<String, dynamic>> _postRequest(
       String endpoint, Map<String, dynamic> body,
       {Map<String, String>? headers}) async {
@@ -28,11 +28,11 @@ class AuthService {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception("Request to $endpoint failed: ${response.statusCode}");
+      throw Exception("Solicitud a $endpoint fallida: ${response.statusCode}");
     }
   }
 
-  // 统一的 GET 请求方法
+  // Método GET unificado
   Future<Map<String, dynamic>> _getRequest(String endpoint,
       {Map<String, String>? headers}) async {
     final url = Uri.parse("$_baseUrl$endpoint");
@@ -44,22 +44,23 @@ class AuthService {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception("Request to $endpoint failed: ${response.statusCode}");
+      throw Exception("Solicitud a $endpoint fallida: ${response.statusCode}");
     }
   }
-    // 划转佣金到余额的方法
+
+  // Método para transferir comisión al saldo
   Future<bool> transferCommission(
       String accessToken, int transferAmount) async {
     final response = await _postRequest(
       '/api/v1/user/transfer',
       {'transfer_amount': transferAmount},
-      headers: {'Authorization': accessToken}, // 需要用户的认证令牌
+      headers: {'Authorization': accessToken}, // Requiere el token de autenticación del usuario
     );
 
-    return response['status'] == 'success';
+    return true;
   }
 
-    // 生成邀请码的方法
+  // Método para generar código de invitación
   Future<bool> generateInviteCode(String accessToken) async {
     final url = Uri.parse("$_baseUrl/api/v1/user/invite/save");
     final response = await http.get(
@@ -68,32 +69,24 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data["status"] == "success") {
-        return true; // 生成成功
-      } else {
-        throw Exception("Failed to generate invite code: ${data["message"]}");
-      }
+      return true; // Generación exitosa
     } else {
       throw Exception(
-          "Request to generate invite code failed: ${response.statusCode}");
+          "Solicitud para generar código de invitación fallida: ${response.statusCode}");
     }
   }
 
-  // 获取邀请码数据
+  // Obtener datos de los códigos de invitación
   Future<List<InviteCode>> fetchInviteCodes(String accessToken) async {
     final result = await _getRequest("/api/v1/user/invite/fetch", headers: {
       'Authorization': accessToken,
     });
 
-    if (result["status"] == "success") {
-      final codes = result["data"]["codes"] as List;
-      return codes.map((json) => InviteCode.fromJson(json)).toList();
-    } else {
-      throw Exception("Failed to retrieve invite codes: ${result["message"]}");
-    }
+    final codes = result["data"]["codes"] as List;
+    return codes.map((json) => InviteCode.fromJson(json)).toList();
   }
-  // 登录请求
+
+  // Solicitud de inicio de sesión
   Future<Map<String, dynamic>> login(String email, String password) async {
     return await _postRequest(
       "/api/v1/passport/auth/login",
@@ -101,7 +94,7 @@ class AuthService {
     );
   }
 
-  // 注册请求
+  // Solicitud de registro
   Future<Map<String, dynamic>> register(String email, String password,
       String inviteCode, String emailCode) async {
     return await _postRequest(
@@ -115,7 +108,7 @@ class AuthService {
     );
   }
 
-  // 发送验证码请求
+  // Solicitud para enviar código de verificación
   Future<Map<String, dynamic>> sendVerificationCode(String email) async {
     final url = Uri.parse("$_baseUrl/api/v1/passport/comm/sendEmailVerify");
     final response = await http.post(
@@ -128,11 +121,11 @@ class AuthService {
       return json.decode(response.body);
     } else {
       throw Exception(
-          "Failed to send verification code: ${response.statusCode}");
+          "No se pudo enviar el código de verificación: ${response.statusCode}");
     }
   }
 
-  // 重置密码请求
+  // Solicitud para restablecer la contraseña
   Future<Map<String, dynamic>> resetPassword(
       String email, String password, String emailCode) async {
     return await _postRequest(
@@ -145,7 +138,7 @@ class AuthService {
     );
   }
 
-  // 获取订阅链接请求
+  // Solicitud para obtener el enlace de suscripción
   Future<String?> getSubscriptionLink(String accessToken) async {
     final url = Uri.parse("$_baseUrl/api/v1/user/getSubscribe");
     final response = await http.get(
@@ -155,34 +148,32 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data["status"] == "success") {
-        return data["data"]["subscribe_url"];
-      } else {
-        throw Exception(
-            "Failed to retrieve subscription link: ${data["message"]}");
-      }
+      return data["data"]["subscribe_url"];
     } else {
       throw Exception(
-          "Failed to retrieve subscription link: ${response.statusCode}");
+          "No se pudo obtener el enlace de suscripción: ${response.statusCode}");
     }
   }
 
-  // 获取套餐计划数据请求
+  // Solicitud para obtener los datos del plan
   Future<List<Plan>> fetchPlanData(String accessToken) async {
-    final result = await _getRequest("/api/v1/user/plan/fetch", headers: {
-      'Authorization': accessToken,
-    });
+    final url = Uri.parse("$_baseUrl/api/v1/user/plan/fetch");
+    final response = await http.get(
+      url,
+      headers: {'Authorization': accessToken},
+    );
 
-    if (result["status"] == "success") {
-      return (result["data"] as List)
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return (data["data"] as List)
           .map((json) => Plan.fromJson(json))
           .toList();
     } else {
-      throw Exception("Failed to retrieve plan data: ${result["message"]}");
+      throw Exception("No se pudo obtener los datos del plan: ${response}");
     }
   }
-  
-    // 验证token的方法
+
+  // Método para validar token
   Future<bool> validateToken(String token) async {
     final url = Uri.parse("$_baseUrl/api/v1/user/getSubscribe");
     final response = await http.get(
@@ -191,31 +182,35 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data["status"] == "success";
+      return true;
     } else if (response.statusCode == 401) {
-      // 处理 token 过期的情况
+      // Manejar el caso de expiración del token
       return false;
     } else {
-      // 处理其他可能的错误
+      // Manejar otros errores
       return false;
     }
   }
 
-    // 获取用户信息
+  // Obtener información del usuario
   Future<UserInfo?> fetchUserInfo(String accessToken) async {
-    final result = await _getRequest("/api/v1/user/info", headers: {
-      'Authorization': accessToken,
-    });
+    final url = Uri.parse("$_baseUrl/api/v1/user/info");
+    final result = await http.get(
+      url,
+      headers: {'Authorization': accessToken},
+    );
 
-    if (result["status"] == "success") {
-      return UserInfo.fromJson(result["data"]);
+    if (result.statusCode == 200) {
+      final data = json.decode(result.body);
+      return UserInfo.fromJson(data["data"]);
     } else {
-      throw Exception("Failed to retrieve user info: ${result["message"]}");
+      final errorBody = result.body;
+      throw Exception("No se pudo obtener la información del usuario: $errorBody");
     }
   }
 
-    Future<String?> resetSubscriptionLink(String accessToken) async {
+  // Restablecer enlace de suscripción
+  Future<String?> resetSubscriptionLink(String accessToken) async {
     final url = Uri.parse("$_baseUrl/api/v1/user/resetSecurity");
     final response = await http.get(
       url,
@@ -224,17 +219,10 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data["status"] == "success") {
-        return data["data"];
-      } else {
-        throw Exception(
-            "Failed to reset subscription link: ${data["message"]}");
-      }
+      return data["data"];
     } else {
       throw Exception(
-          "Failed to reset subscription link: ${response.statusCode}");
+          "No se pudo restablecer el enlace de suscripción: ${response.statusCode}");
     }
   }
-
-
 }
