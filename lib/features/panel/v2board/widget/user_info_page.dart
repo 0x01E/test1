@@ -18,6 +18,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hiddify/core/localization/translations.dart';
 import 'package:hiddify/features/panel/v2board/service/auth_provider.dart';
+import 'package:hiddify/features/panel/v2board/models/plan_model.dart';
 
 class UserInfoPage extends ConsumerWidget {
   const UserInfoPage({super.key});
@@ -324,7 +325,7 @@ void _showWithdrawDialog(
               ),
             Expanded(
               child: Text(
-                '${t.userInfo.accountStatus}: ${userInfo.banned ? t.userInfo.banned : t.userInfo.active}', // 账户状态
+                '${t.userInfo.accountStatus}: ${userInfo.banned == 1 ? t.userInfo.banned : t.userInfo.active}', // 账户状态
                 style: const TextStyle(fontSize: 12), // 字体缩小
                 textAlign: TextAlign.end, // 文本右对齐
               ),

@@ -71,6 +71,27 @@ class PurchasePage extends ConsumerWidget {
     }
   }
 
+  String? getHighestPriorityPrice(Plan plan) {
+    if (plan.monthPrice != null) {
+      return '${plan.monthPrice}'; // Precio mensual
+    } else if (plan.quarterPrice != null) {
+      return '${plan.quarterPrice}'; // Precio trimestral
+    } else if (plan.halfYearPrice != null) {
+      return '${plan.halfYearPrice}'; // Precio semestral
+    } else if (plan.yearPrice != null) {
+      return '${plan.yearPrice}'; // Precio anual
+    } else if (plan.twoYearPrice != null) {
+      return '${plan.twoYearPrice}'; // Precio bienal
+    } else if (plan.threeYearPrice != null) {
+      return '${plan.threeYearPrice}'; // Precio trienal
+    } else if (plan.onetimePrice != null) {
+      return '${plan.onetimePrice}'; // Precio único
+    } else {
+      return null; // Si no hay datos
+    }
+  }
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider);
@@ -150,7 +171,7 @@ class PurchasePage extends ConsumerWidget {
                                   ),
                                   TextSpan(
                                     text:
-                                        '${plan.onetimePrice ?? t.purchase.noData}',
+                                        '${getHighestPriorityPrice(plan) ?? t.purchase.noData}',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
