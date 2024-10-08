@@ -20,7 +20,7 @@ import 'package:hiddify/utils/utils.dart';
 
 import 'package:hiddify/features/panel/v2board/widget/login_page.dart'; 
 import 'package:hiddify/features/panel/v2board/widget/register_page.dart';
-import 'package:hiddify/features/panel/v2board/widget/purchase_page.dart'; 
+//import 'package:hiddify/features/panel/v2board/widget/purchase_page.dart'; 
 import 'package:hiddify/features/panel/v2board/widget/forgot_passwd_page.dart';
 part 'routes.g.dart';
 
@@ -80,10 +80,10 @@ GlobalKey<NavigatorState>? _dynamicRootKey = useMobileRouter ? rootNavigatorKey 
       path: "/proxies",
       name: ProxiesRoute.name,
     ),
-    TypedGoRoute<PurchaseRoute>(
-      path: "/purchase",
-      name: PurchaseRoute.name,
-    ),
+    //TypedGoRoute<PurchaseRoute>(
+    //  path: "/purchase",
+    //  name: PurchaseRoute.name,
+    //),
     TypedGoRoute<UserInfoRoute>(
       path: "/user-info",
       name: UserInfoRoute.name,
@@ -127,10 +127,10 @@ class MobileWrapperRoute extends ShellRouteData {
         ),
       ],
     ),
-    TypedGoRoute<PurchaseRoute>(
-      path: "/purchase",
-      name: PurchaseRoute.name,
-    ),
+    //TypedGoRoute<PurchaseRoute>(
+    //  path: "/purchase",
+    //  name: PurchaseRoute.name,
+    //),
     TypedGoRoute<UserInfoRoute>(
       path: "/user-info",
       name: UserInfoRoute.name,
