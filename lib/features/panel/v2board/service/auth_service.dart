@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
-  static const _baseUrl = "https://kssw.181889.xyz";
+  static const _baseUrl = "http://47.122.62.165:1080";
   static const _inviteLinkBase = "$_baseUrl/#/register?code=";
 
   // Método para obtener el enlace completo del código de invitación
