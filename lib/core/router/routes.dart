@@ -260,18 +260,18 @@ class ProxiesRoute extends GoRouteData {
     );
   }
 }
-class PurchaseRoute extends GoRouteData {
-  const PurchaseRoute();
-  static const name = "Purchase";
+//class PurchaseRoute extends GoRouteData {
+//  const PurchaseRoute();
+//  static const name = "Purchase";
 
-  @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return const NoTransitionPage(
-      name: name,
-      child: PurchasePage(), // 确保 PurchasePage 是定义好的组件
-    );
-  }
-}
+//  @override
+//  Page<void> buildPage(BuildContext context, GoRouterState state) {
+//    return const NoTransitionPage(
+//      name: name,
+//      child: PurchasePage(), // 确保 PurchasePage 是定义好的组件
+//    );
+//  }
+//}
 
 class UserInfoRoute extends GoRouteData {
   const UserInfoRoute();
