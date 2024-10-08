@@ -45,19 +45,16 @@ class HomePage extends HookConsumerWidget {
                   ),
                 ),
                 actions: [
+                  // 仅保留快速设置按钮，移除添加配置文件的按钮
                   IconButton(
                     onPressed: () => const QuickSettingsRoute().push(context),
                     icon: const Icon(FluentIcons.options_24_filled),
                     tooltip: t.config.quickSettings,
                   ),
-                  IconButton(
-                    onPressed: () => const AddProfileRoute().push(context),
-                    icon: const Icon(FluentIcons.add_circle_24_filled),
-                    tooltip: t.profile.add.buttonText,
-                  ),
                 ],
               ),
               switch (activeProfile) {
+                // 如果有活跃的配置文件，显示相应的内容
                 AsyncData(value: final profile?) => MultiSliver(
                     children: [
                       ProfileTile(profile: profile, isMain: true),
@@ -76,17 +73,42 @@ class HomePage extends HookConsumerWidget {
                                 ],
                               ),
                             ),
-                            if (MediaQuery.sizeOf(context).width < 840) const ActiveProxyFooter(),
+                            if (MediaQuery.sizeOf(context).width < 840)
+                              const ActiveProxyFooter(),
                           ],
                         ),
                       ),
                     ],
                   ),
+                // 修改无活跃配置文件时的提示信息
                 AsyncData() => switch (hasAnyProfile) {
-                    AsyncData(value: true) => const EmptyActiveProfileHomeBody(),
-                    _ => const EmptyProfilesHomeBody(),
+                    AsyncData(value: true) =>
+                      const EmptyActiveProfileHomeBody(),
+                    _ => SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(t.home.noSubscriptionMsg,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // 导航到套餐购买页面
+                                  const PurchaseRoute().push(context);
+                                },
+                                child: Text(t.home.goToPurchasePage),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   },
-                AsyncError(:final error) => SliverErrorBodyPlaceholder(t.presentShortError(error)),
+                AsyncError(:final error) =>
+                  SliverErrorBodyPlaceholder(t.presentShortError(error)),
                 _ => const SliverToBoxAdapter(),
               },
             ],
