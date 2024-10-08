@@ -95,13 +95,13 @@ class HomePage extends HookConsumerWidget {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
+                              //ElevatedButton(
+                              //  onPressed: () {
                                   // 导航到套餐购买页面
-                                  const PurchaseRoute().push(context);
-                                },
-                                child: Text(t.home.goToPurchasePage),
-                              ),
+                              //    const PurchaseRoute().push(context);
+                              //  },
+                              //  child: Text(t.home.goToPurchasePage),
+                              //),
                             ],
                           ),
                         ),
