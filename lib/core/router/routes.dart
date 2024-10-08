@@ -20,7 +20,7 @@ import 'package:hiddify/utils/utils.dart';
 
 import 'package:hiddify/features/panel/v2board/widget/login_page.dart'; 
 import 'package:hiddify/features/panel/v2board/widget/register_page.dart';
-//import 'package:hiddify/features/panel/v2board/widget/purchase_page.dart'; 
+import 'package:hiddify/features/panel/v2board/widget/purchase_page.dart'; 
 import 'package:hiddify/features/panel/v2board/widget/forgot_passwd_page.dart';
 part 'routes.g.dart';
 
